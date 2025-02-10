@@ -14,7 +14,7 @@ blueprint:
         device:
           filter:
           - integration: mqtt
-            model: Zigbee 3.0 Keypad Pulse 4S (ICZB-KPD14S)
+            model: Zigbee 3.0 Keypad Pulse 4S
           multiple: false
     button_1_section:
       name: Actions for button 1
