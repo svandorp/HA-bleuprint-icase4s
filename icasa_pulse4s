@@ -1,0 +1,104 @@
+blueprint:
+  name: Z2M - iCasa Pulse 4S
+  description: 'Control anything you want with iCasa Pulse 4S switch.
+    Each button has single, double, triple, hold & release'
+  author: Sander van Dorp
+  homeassistant:
+    min_version: 2025.1.0
+  domain: automation
+  input:
+    device_selection:
+      name: Select the device you want to configure
+      description: iCasa switch to use
+      selector:
+        device:
+          filter:
+          - integration: mqtt
+            model: Zigbee 3.0 Keypad Pulse 4S (ICZB-KPD14S)
+          multiple: false
+    button_1_section:
+      name: Actions for button 1
+      icon: mdi:numeric-1-box
+      collapsed: true
+      input:
+        button_1_single:
+          name: Single click
+          description: Action to run on single click
+          default: []
+          selector:
+            action: {}
+    button_2_section:
+      name: Actions for button 2
+      icon: mdi:numeric-2-box
+      collapsed: true
+      input:
+        button_2_single:
+          name: Single click
+          description: Action to run on single click
+          default: []
+          selector:
+            action: {}
+    button_3_section:
+      name: Actions for button 3
+      icon: mdi:numeric-3-box
+      collapsed: true
+      input:
+        button_3_single:
+          name: Single click
+          description: Action to run on single click
+          default: []
+          selector:
+            action: {}
+    button_4_section:
+      name: Actions for button 4
+      icon: mdi:numeric-4-box
+      collapsed: true
+      input:
+        button_4_single:
+          name: Single click
+          description: Action to run on single clic
+          default: []
+          selector:
+            action: {}
+
+mode: restart
+max_exceeded: silent
+triggers:
+- domain: mqtt
+  device_id: !input device_selection
+  type: action
+  subtype: off
+  trigger: device
+- domain: mqtt
+  device_id: !input device_selection
+  type: action
+  subtype: on
+  trigger: device
+- domain: mqtt
+  device_id: !input device_selection
+  type: action
+  subtype: recall_1
+  trigger: device
+- domain: mqtt
+  device_id: !input device_selection
+  type: action
+  subtype: recall_2
+  trigger: device
+actions:
+- choose:
+  - conditions:
+    - condition: template
+      value_template: '{{ trigger.payload == ''off'' }}'
+    sequence: !input button_1_single
+  - conditions:
+    - condition: template
+      value_template: '{{ trigger.payload == ''on'' }}'
+    sequence: !input button_2_single
+  - conditions:
+    - condition: template
+      value_template: '{{ trigger.payload == ''recall_1'' }}'
+    sequence: !input button_3_single
+  - conditions:
+    - condition: template
+      value_template: '{{ trigger.payload == ''recall_2'' }}'
+    sequence: !input button_4_single
